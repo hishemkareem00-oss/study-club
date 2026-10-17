@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Study Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#0b0d12;--bg2:#141822;--card:rgba(24,28,38,.74);--ink:#eef1f7;--mute:#8d96a8;--ac:#4f8cff;--ac2:#7aa7ff;--line:rgba(255,255,255,.1);--glow:rgba(79,140,255,.35);--ok:#2ecc8f;--bad:#ff5468;--warn:#ffb020}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+[data-theme=female]{--bg:#fff0f6;--bg2:#ffe3ee;--card:rgba(255,255,255,.78);--ink:#4a1d33;--mute:#a0708a;--ac:#ff4d8d;--ac2:#ff8fb7;--line:rgba(255,77,141,.2);--glow:rgba(255,77,141,.35)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(1200px 600px at 20% -10%,var(--bg2),var(--bg));background-color:var(--bg);background-size:cover;background-attachment:fixed;overflow-x:hidden}
+.hearts{display:none;position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+[data-theme=female] .hearts{display:block}
+.hearts i{position:absolute;bottom:-40px;font-style:normal;opacity:.5;animation:up linear infinite}
+@keyframes up{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+main{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:16px 14px 60px}
+.card{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+h1,h2,h3{margin:0}h2{font-size:18px;margin-bottom:10px}
+small,.mute{color:var(--mute)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.logo{font-weight:800;font-size:20px;letter-spacing:.3px;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+button,.btn{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:10px 16px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 6px 18px var(--glow)}
+button:disabled{opacity:.45;box-shadow:none}
+button.ghost,.tabs button{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.tabs button.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0}
+button.sm{padding:6px 12px;font-size:13px}button.bad{background:var(--bad);box-shadow:none}button.good{background:var(--ok);box-shadow:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sc{text-align:center;margin:0;cursor:default}.sc.mine{border-color:var(--ac)}.sc[data-act]{cursor:pointer}
+.ring{width:132px;height:132px;border-radius:50%;background:conic-gradient(var(--ac) var(--d),var(--line) 0);display:grid;place-items:center;margin:0 auto 10px;box-shadow:0 0 34px var(--glow)}
+.ring .in{width:106px;height:106px;border-radius:50%;background:var(--bg2);display:grid;place-content:center}
+.ring b{font-size:38px;line-height:1}.ring small{font-size:10px;letter-spacing:2px}
+.meta{display:flex;gap:6px;justify-content:center;margin-top:8px;font-size:13px;flex-wrap:wrap}
+.meta span{background:var(--line);padding:3px 10px;border-radius:99px}
+.hint{font-size:11px;color:var(--mute);margin-top:6px}
+.seg{display:flex;gap:8px;margin-bottom:12px}.seg button{flex:1}
+.drop{display:block;border:2px dashed var(--line);border-radius:16px;padding:18px;text-align:center;color:var(--mute);cursor:pointer}
+.drop:hover{border-color:var(--ac)}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.thumbs img,.pimg{width:96px;height:96px;object-fit:cover;border-radius:12px;cursor:zoom-in;border:1px solid var(--line)}
+.pimg.big{width:100%;height:auto;max-height:240px;object-fit:contain;background:#0003}
+input[type=text],input[type=password],input[type=number],textarea{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);font:inherit;margin-top:8px}
+.cd{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ac)}
+.chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--line)}
+.chip.ok{background:#2ecc8f33;color:var(--ok)}.chip.no{background:#ff546833;color:var(--bad)}.chip.wt{background:#ffb02033;color:var(--warn)}
+.fail{background:linear-gradient(135deg,#7a0f1c,#d9304a);color:#fff;border-radius:18px;padding:16px;margin-bottom:14px;text-align:center;font-weight:800;font-size:18px;animation:pulse 1.6s infinite}
+.fail small{display:block;color:#ffd3d9;font-weight:600;margin-top:4px}
+@keyframes pulse{50%{transform:scale(1.015)}}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}.row input{flex:1;min-width:70px;margin:0}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.pick button{padding:22px;font-size:20px}
+.login{max-width:420px;margin:12vh auto 0;text-align:center}
+.er{color:var(--bad)}
+.ov{position:fixed;inset:0;background:#000b;z-index:50;display:grid;place-items:center;padding:16px;overflow:auto}
+.ov .card{max-width:440px;width:100%;margin:0}.ov img.z{max-width:100%;max-height:90vh;border-radius:12px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--ac);color:#fff;padding:10px 18px;border-radius:99px;z-index:60;transition:.3s;font-weight:600}
+#toast.on{transform:translateX(-50%) translateY(0)}
+.bgs{display:flex;gap:8px;flex-wrap:wrap}.bgs img{width:70px;height:70px;object-fit:cover;border-radius:10px}
+@media(max-width:480px){.ring{width:112px;height:112px}.ring .in{width:90px;height:90px}.ring b{font-size:30px}.thumbs img,.pimg{width:78px;height:78px}}
+[dir=rtl] body{font-family:Cairo,Inter,system-ui,sans-serif}.lang{min-width:44px}.pgrp{margin:10px 0;padding:10px;border-radius:14px;background:var(--bg2)}
+</style>
+</head>
+<body>
+<div class="hearts" id="hr"></div>
+<main id="app"></main>
+<div id="toast"></div>
+<script>
+(()=>{
+// رابط سيرفر Firebase الخاص بك تم ربطه جاهزاً هنا:
+const FIREBASE_URL = "https://study-club-a8a0b-default-rtdb.firebaseio.com"; 
+
+const PW='191919',O=k=>k==='karim'?'malak':'karim',NOW=()=>Date.now();
+const T={en:{karim:'Karim',malak:'Malak',who:'Who are you?',choose:'Choose your name to continue',pw:'Password',enter:'Enter',back:'Back',wrongpw:'Wrong password',signin:'Loading database...',logout:'Log out',home:'Home',review:'Review',admin:'Admin',you:'(you)',score:'SCORE',freeze:'freeze',leave:'on leave',tapleave:'Tap your score to request a leave',lastleave:'Last leave request',days:'day(s)',appr:'✅ approved',decl:'❌ declined',wait:'⏳ waiting',myplan:'📋 My plan',daily:'Daily plan',weekly:'Weekly plan',addplan:'📷 Tap to add a photo of your plan',start:'Start plan',dh:'Timer runs until the end of today.',wh:'Timer runs for 7 days.',left:'Time left',studied:'📚 What I did / studied',addph:'📸 Add photos (as many as you want)',note:'Note (optional)',send:'Send for review',sending:'Sending…',sh:'The other person will check it. Only verified work gives points.',lock:'Add your plan first to unlock this.',mysubs:'My submissions',pend:'Pending review',ver:'Verified ✔',wrongc:'Wrong ✘ not counted',lreq:'🌴 Leave requests',wants:'wants',apv:'Approve',dcl:'Decline',rw:'🔎 Review work',nothing:'Nothing waiting. All caught up.',pln:'Plan',ok:'✔ Correct',bad:'✘ Wrong',final:'🏁 Final approval — plan complete',finalh:'Stops the timer and closes this plan.',older:'Work from older plans',nosub:'No work sent yet',chg:'Change plan',chgq:'Change your plan?',chgd:'Your current plan will be closed (no penalty) and you can create a new one. Points you already earned stay.',yes:'Yes, change',cancel:'Cancel',close:'Close',lvh:'Your score stays safe while on leave. Karim will approve or decline.',howmany:'How many days?',lsend:'Send request',bgt:'🎨 Background',dark:'🖤 Dark',hearts:'💗 Hearts',bgup:'➕ Upload your own background (both can use it)',failt:'❌ YOU FAILED',failx:'points were deducted',m_daily:'You missed your daily plan',m_weekly:'You missed your weekly plan',asp:'⚙️ Scores & players',sh2:'score · streak · freezes',gph:'Grant leave (days)',grant:'Grant',cf:'Clear fail banner',rules:'🎯 Rules',rh:'points per verified work · points lost per failed plan',ap:'📋 Active plans',none:'None',cp:'Cancel plan',bgs:'🖼 Custom backgrounds',nobg:'None uploaded yet',del:'Delete',lg:'🔐 Karim logins (last 3 days)',nolg:'No logins',save:'Save',saved:'Saved',sent:'Sent for review',rs:'Request sent',ps:'Plan started — timer is running',s7:'7-day streak! Freeze day earned ❄️',bga:'Background added',imf:'Could not load that image',er:'Something went wrong, try again',fin:'Plan completed 🏁',gr:'Leave granted',changed:'Plan closed — create a new one',streak:'d'},
+ar:{karim:'كريم',malak:'ملك',who:'انت مين؟',choose:'اختار اسمك عشان تكمل',pw:'الباسورد',enter:'دخول',back:'رجوع',wrongpw:'الباسورد غلط',signin:'جاري التحميل...',logout:'خروج',home:'الرئيسية',review:'المراجعة',admin:'الأدمن',you:'(أنت)',score:'السكور',freeze:'فريز',leave:'في إجازة',tapleave:'دوس على السكور عشان تطلب إجازة',lastleave:'آخر طلب إجازة',days:'يوم',appr:'✅ اتوافق',decl:'❌ اترفض',wait:'⏳ مستني',myplan:'📋 خطتي',daily:'خطة يومية',weekly:'خطة أسبوعية',addplan:'📷 دوس وضيف صورة خطتك',start:'ابدأ الخطة',dh:'العداد شغال لحد آخر النهاردة.',wh:'العداد شغال 7 أيام.',left:'الوقت الباقي',studied:'📚 عملت / ذاكرت إيه',addph:'📸 ضيف صور (أي عدد)',note:'ملاحظة (اختياري)',send:'ابعت للمراجعة',sending:'جاري الإرسال…',sh:'الطرف التاني هيراجعها. الشغل المتحقق بس هو اللي بيجيب نقط.',lock:'ضيف خطتك الأول عشان تفتح ده.',mysubs:'اللي بعتّه',pend:'مستني المراجعة',ver:'متحقق ✔',wrongc:'غلط ✘ مش محسوب',lreq:'🌴 طلبات الإجازة',wants:'عايزة',apv:'موافقة',dcl:'رفض',rw:'🔎 مراجعة الشغل',nothing:'مفيش حاجة مستنية.',pln:'الخطة',ok:'✔ صح',bad:'✘ غلط',final:'🏁 موافقة نهائية — الخطة خلصت',finalh:'بيوقف العداد ويقفل الخطة دي.',older:'شغل من خطط قديمة',nosub:'لسه مبعتش شغل',chg:'غيّر الخطة',chgq:'تغيّر خطتك؟',chgd:'الخطة الحالية هتتقفل (من غير خصم) وتعمل واحدة جديدة. النقط اللي خدتها بتفضل.',yes:'أيوه، غيّر',cancel:'إلغاء',close:'إغلاق',lvh:'السكور بيفضل زي ما هو وإنتي في إجازة. كريم هيوافق أو يرفض.',howmany:'كام يوم؟',lsend:'ابعت الطلب',bgt:'🎨 الخلفية',dark:'🖤 دارك',hearts:'💗 قلوب',bgup:'➕ ارفع خلفية من عندك (الاتنين يقدروا يستخدموها)',failt:'❌ فشلت',failx:'اتخصم من النقط',m_daily:'فاتتك الخطة اليومية',m_weekly:'فاتتك الخطة الأسبوعية',asp:'⚙️ السكور واللاعبين',sh2:'سكور · ستريك · فريز',gph:'إجازة (أيام)',grant:'امنح',cf:'شيل بانر الفشل',rules:'🎯 القواعد',rh:'نقط الشغل المتحقق · نقط الخصم للخطة الفاشلة',ap:'📋 الخطط الشغالة',none:'مفيش',cp:'إلغاء الخطة',bgs:'🖼 الخلفيات المخصصة',nobg:'لسه مفيش خلفيات',del:'مسح',lg:'🔐 دخول كريم (آخر 3 أيام)',nolg:'مفيش دخول',save:'حفظ',saved:'اتحفظ',sent:'اتبعت للمراجعة',rs:'الطلب اتبعت',ps:'الخطة بدأت — العداد شغال',s7:'7 أيام ورا بعض! خدت يوم فريز ❄️',bga:'الخلفية اتضافت',imf:'مقدرتش أحمّل الصورة',er:'حصلت مشكلة، جرب تاني',fin:'الخطة خلصت 🏁',gr:'الإجازة اتمنحت',changed:'الخطة اتقفلت — اعمل واحدة جديدة',streak:'ي'}};
+let lang=(()=>{try{return localStorage.getItem('lang')}catch(e){}})()||'ar';
+const t=k=>T[lang][k]||T.en[k]||k;
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
+const DEF={score:0,streak:0,freezes:0,lastStudy:'',failUntil:0,leaveUntil:0,failMsg:''};
+let db,me=ls('me'),tab='home',modal=null,loginK=null,err='',settling=0,raf=0,busy=0;
+let st={users:{},plans:[],study:[],shots:[],leaves:[],bgs:[],logins:[],cfg:{reward:1,penalty:1}};
+let dr={type:'daily',plan:null,imgs:[],note:''};
+const U=k=>Object.assign({},DEF,st.users[k]||{}),D=p=>db.doc(p),DT=ms=>new Date(ms).toLocaleString(lang==='ar'?'ar-EG':'en-GB');
+const toast=m=>{const x=$('#toast');x.textContent=t(m);x.classList.add('on');setTimeout(()=>x.classList.remove('on'),2400)};
+const fmt=ms=>{if(ms<=0)return lang==='ar'?'الوقت خلص':"Time's up";let s=Math.floor(ms/1e3),h=Math.floor(s/3600);s%=3600;const m=Math.floor(s/60);s%=60;return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')};
+const hr=$('#hr');['💗','💖','💕','🤍','💞'].forEach(e=>{for(let j=0;j<3;j++){const s=document.createElement('i');s.textContent=e;s.style.left=Math.random()*100+'%';s.style.fontSize=14+Math.random()*18+'px';s.style.animationDuration=9+Math.random()*10+'s';s.style.animationDelay=-Math.random()*15+'s';hr.appendChild(s)}});
+async function shrink(f,max,q){const b=await createImageBitmap(f),r=Math.min(1,max/Math.max(b.width,b.height)),c=document.createElement('canvas');c.width=b.width*r;c.height=b.height*r;c.getContext('2d').drawImage(b,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)}
+function applyTheme(){const th=ls('theme')||'male',r=document.documentElement;r.dataset.theme=th==='female'?'female':'male';r.lang=lang;r.dir=lang==='ar'?'rtl':'ltr';const b=th.indexOf('bg:')===0&&st.bgs.find(x=>x.id===th.slice(3));document.body.style.backgroundImage=b?'linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.6)),url('+b.img+')':''}
+
+const pend=()=>st.study.filter(s=>s.who===O(me)&&s.status==='pending');
+const myPlan=()=>st.plans.find(p=>p.who===me&&p.status==='active');
+const imgsOf=s=>st.shots.filter(x=>x.sid===s.id).sort((a,b)=>a.i-b.i).map(x=>x.img);
+const thumbs=a=>'<div class="thumbs">'+a.map(s=>'<img src="'+s+'" data-act="zoom">').join('')+'</div>';
+const chip=s=>s==='ok'?'<span class="chip ok">'+t('ver')+'</span>':s==='bad'?'<span class="chip no">'+t('wrongc')+'</span>':'<span class="chip wt">'+t('pend')+'</span>';
+function sc(k){const u=U(k),f=u.streak>0&&u.streak%7===0?7:u.streak%7,mine=k===me,lv=mine&&me==='malak';
+return '<div class="card sc '+(mine?'mine':'')+'"'+(lv?' data-act="leave"':'')+'><div class="ring" style="--d:'+f/7*360+'deg"><div class="in"><b>'+u.score+'</b><small>'+t('score')+'</small></div></div><h3>'+t(k)+(mine?' '+t('you'):'')+'</h3><div class="meta"><span>🔥 '+u.streak+t('streak')+'</span><span>❄️ '+u.freezes+' '+t('freeze')+'</span>'+(u.leaveUntil>NOW()?'<span>🌴 '+t('leave')+'</span>':'')+'</div>'+(lv?'<div class="hint">'+t('tapleave')+'</div>':'')+'</div>'}
+const langBtn=()=>'<button class="sm ghost lang" data-act="lang">'+(lang==='ar'?'EN':'عربي')+'</button>';
+
+function login(){return '<div class="card login"><div style="text-align:end">'+langBtn()+'</div><h1>'+t('who')+'</h1><p class="mute">'+t('choose')+'</p>'+(loginK?'<input id="pw" type="password" inputmode="numeric" placeholder="'+t('pw')+'" autocomplete="off"><div class="row"><button data-act="back" class="ghost">'+t('back')+'</button><button data-act="pw" style="flex:1">'+t('enter')+'</button></div>'+(err?'<p class="er">'+t(err)+'</p>':''):'<div class="pick"><button data-act="pick" data-k="karim">'+t('karim')+'</button><button data-act="pick" data-k="malak">'+t('malak')+'</button></div>')+'</div>'}
+
+function subCard(s,btns){return '<div class="pgrp"><small>'+DT(s.ts)+'</small> '+chip(s.status)+thumbs(imgsOf(s))+(s.note?'<p style="margin:6px 0">“'+esc(s.note)+'”</p>':'')+(btns&&s.status==='pending'?'<div class="row"><button class="good" data-act="ok" data-id="'+s.id+'" style="flex:1">'+t('ok')+' (+'+st.cfg.reward+')</button><button class="bad" data-act="bad" data-id="'+s.id+'" style="flex:1">'+t('bad')+'</button></div>':'')+'</div>'}
+
+function home(){
+ const u=U(me),p=myPlan(),L=st.leaves.filter(l=>l.who===me).sort((a,b)=>b.ts-a.ts)[0];
+ let h='';
+ if(u.failUntil>NOW())h+='<div class="fail">'+t('failt')+'<small>'+t('m_'+(u.failMsg||'daily'))+' — '+t('failx')+'</small></div>';
+ h+='<div class="grid" style="margin-bottom:14px">'+sc('karim')+sc('malak')+'</div>';
+ if(L)h+='<p class="mute" style="margin:-4px 0 14px">'+t('lastleave')+': '+L.days+' '+t('days')+' — '+(L.status==='ok'?t('appr'):L.status==='no'?t('decl'):t('wait'))+'</p>';
+ h+='<div class="card"><h2>'+t('myplan')+'</h2>';
+ if(p)h+='<span class="chip">'+t(p.type)+'</span><img class="pimg big" style="margin-top:10px" src="'+p.img+'" data-act="zoom"><div class="row" style="justify-content:space-between"><small>'+t('left')+'</small><div class="cd" data-due="'+p.due+'">'+fmt(p.due-NOW())+'</div></div><button class="sm ghost" data-act="chg">'+t('chg')+'</button>';
+ else h+='<div class="seg"><button data-act="type" data-v="daily" class="'+(dr.type==='daily'?'':'ghost')+'">'+t('daily')+'</button><button data-act="type" data-v="weekly" class="'+(dr.type==='weekly'?'':'ghost')+'">'+t('weekly')+'</button></div><label class="drop">'+(dr.plan?'<img class="pimg big" src="'+dr.plan+'">':t('addplan'))+'<input type="file" accept="image/*" hidden data-file="plan"></label><button style="width:100%;margin-top:12px" data-act="startPlan"'+(dr.plan?'':' disabled')+'>'+t('start')+'</button><p class="hint">'+t(dr.type==='daily'?'dh':'wh')+'</p>';
+ h+='</div><div class="card"><h2>'+t('studied')+'</h2>';
+ if(!p)h+='<p class="mute">'+t('lock')+'</p>';
+ else h+='<label class="drop">'+t('addph')+'<input type="file" accept="image/*" multiple hidden data-file="imgs"></label>'+(dr.imgs.length?'<div class="thumbs">'+dr.imgs.map((s,i)=>'<span style="position:relative"><img src="'+s+'" data-act="zoom"><b data-act="rm" data-i="'+i+'" style="position:absolute;top:2px;inset-inline-end:2px;background:#000a;color:#fff;border-radius:50%;width:22px;height:22px;display:grid;place-items:center;cursor:pointer">×</b></span>').join('')+'</div><small>'+dr.imgs.length+' 📷</small>':'')+'<input type="text" data-in="note" placeholder="'+t('note')+'" maxlength="100" value="'+esc(dr.note)+'"><button style="width:100%;margin-top:12px" data-act="send"'+(dr.imgs.length&&!busy?'':' disabled')+'>'+t(busy?'sending':'send')+'</button><p class="hint">'+t('sh')+'</p>';
+ h+='</div>';
+ const mine=st.study.filter(s=>s.who===me).sort((a,b)=>b.ts-a.ts).slice(0,6);
+ if(mine.length)h+='<div class="card"><h2>'+t('mysubs')+'</h2>'+mine.map(s=>subCard(s,0)).join('')+'</div>';
+ return h}
+
+function review(){
+ let h='';
+ if(me==='karim'){const L=st.leaves.filter(l=>l.status==='pending');if(L.length)h+='<div class="card"><h2>'+t('lreq')+'</h2>'+L.map(l=>'<div class="row" style="justify-content:space-between"><span><b>'+t(l.who)+'</b> '+t('wants')+' '+l.days+' '+t('days')+'</span><span><button class="sm good" data-act="lok" data-id="'+l.id+'">'+t('apv')+'</button> <button class="sm bad" data-act="lno" data-id="'+l.id+'">'+t('dcl')+'</button></span></div>').join('')+'</div>'}
+ const o=O(me),act=st.plans.filter(p=>p.who===o&&p.status==='active'),ids=act.map(p=>p.id);
+ h+='<h2 style="margin:6px 4px 10px">'+t('rw')+' · '+t(o)+'</h2>';
+ if(!act.length&&!pend().length)h+='<div class="card"><p class="mute">'+t('nothing')+'</p></div>';
+ act.forEach(p=>{const S=st.study.filter(s=>s.planId===p.id).sort((a,b)=>a.ts-b.ts);
+  h+='<div class="card"><span class="chip">'+t(p.type)+'</span><div class="row" style="justify-content:space-between"><small>'+t('left')+'</small><div class="cd" data-due="'+p.due+'">'+fmt(p.due-NOW())+'</div></div>'+thumbs([p.img])+(S.length?S.map(s=>subCard(s,1)).join(''):'<p class="mute">'+t('nosub')+'</p>')+'<button class="good" style="width:100%;margin-top:10px" data-act="final" data-id="'+p.id+'">'+t('final')+'</button><p class="hint">'+t('finalh')+'</p></div>'});
+ const old=pend().filter(s=>!ids.includes(s.planId));
+ if(old.length)h+='<div class="card"><h2>'+t('older')+'</h2>'+old.map(s=>subCard(s,1)).join('')+'</div>';
+ return h}
+
+function admin(){
+ let h='<div class="card"><h2>'+t('asp')+'</h2>';
+ ['karim','malak'].forEach(k=>{const u=U(k);h+='<div style="margin-bottom:14px"><b>'+t(k)+'</b><div class="row"><input type="number" id="s_'+k+'" value="'+u.score+'"><input type="number" id="t_'+k+'" value="'+u.streak+'"><input type="number" id="f_'+k+'" value="'+u.freezes+'"><button class="sm" data-act="saveU" data-k="'+k+'">'+t('save')+'</button></div><small>'+t('sh2')+'</small><div class="row"><input type="number" id="l_'+k+'" placeholder="'+t('gph')+'"><button class="sm ghost" data-act="grant" data-k="'+k+'">'+t('grant')+'</button><button class="sm ghost" data-act="clearFail" data-k="'+k+'">'+t('cf')+'</button></div></div>'});
+ h+='</div><div class="card"><h2>'+t('rules')+'</h2><div class="row"><input type="number" id="c_r" value="'+st.cfg.reward+'"><input type="number" id="c_p" value="'+st.cfg.penalty+'"><button class="sm" data-act="saveCfg">'+t('save')+'</button></div><small>'+t('rh')+'</small></div>';
+ const A=st.plans.filter(p=>p.status==='active');
+ h+='<div class="card"><h2>'+t('ap')+'</h2>'+(A.length?A.map(p=>'<div class="row" style="justify-content:space-between"><span>'+t(p.who)+' · '+t(p.type)+' · <span class="cd" style="font-size:15px" data-due="'+p.due+'">'+fmt(p.due-NOW())+'</span></span><button class="sm bad" data-act="cancelPlan" data-id="'+p.id+'">'+t('cp')+'</button></div>').join(''):'<p class="mute">'+t('none')+'</p>')+'</div>';
+ h+='<div class="card"><h2>'+t('bgs')+'</h2>'+(st.bgs.length?'<div class="bgs">'+st.bgs.map(b=>'<div><img src="'+b.img+'"><br><button class="sm bad" data-act="delBg" data-id="'+b.id+'">'+t('del')+'</button></div>').join('')+'</div>':'<p class="mute">'+t('nobg')+'</p>')+'</div>';
+ const lg=st.logins.filter(l=>l.ts>NOW()-2592e5).sort((a,b)=>b.ts-a.ts);
+ return h+'<div class="card"><h2>'+t('lg')+'</h2>'+(lg.length?lg.map(l=>'<div class="mute">'+DT(l.ts)+'</div>').join(''):'<p class="mute">'+t('nolg')+'</p>')+'</div>'}
+
+function modalHTML(){
+ if(!modal)return '';
+ if(modal.z)return '<div class="ov" data-act="close"><img class="z" src="'+modal.z+'"></div>';
+ if(modal.l)return '<div class="ov"><div class="card"><h2>🌴 '+(lang==='ar'?'اطلبي إجازة':'Request a leave')+'</h2><p class="mute">'+t('lvh')+'</p><input type="number" id="ld" min="1" max="30" placeholder="'+t('howmany')+'"><div class="row"><button class="ghost" data-act="close">'+t('cancel')+'</button><button data-act="sendLeave" style="flex:1">'+t('lsend')+'</button></div></div></div>';
+ if(modal.c)return '<div class="ov"><div class="card"><h2>'+t('chgq')+'</h2><p class="mute">'+t('chgd')+'</p><div class="row"><button class="ghost" data-act="close">'+t('cancel')+'</button><button data-act="doChg" style="flex:1">'+t('yes')+'</button></div></div></div>';
+ const th=ls('theme')||'male';
+ return '<div class="ov"><div class="card"><h2>'+t('bgt')+'</h2><div class="seg"><button data-act="setTheme" data-v="male" class="'+(th==='male'?'':'ghost')+'">'+t('dark')+'</button><button data-act="setTheme" data-v="female" class="'+(th==='female'?'':'ghost')+'">'+t('hearts')+'</button></div>'+(st.bgs.length?'<div class="bgs">'+st.bgs.map(b=>'<img src="'+b.img+'" data-act="setTheme" data-v="bg:'+b.id+'" style="'+(th==='bg:'+b.id?'outline:3px solid var(--ac)':'')+'">').join('')+'</div>':'')+'<label class="drop" style="margin-top:12px">'+t('bgup')+'<input type="file" accept="image/*" hidden data-file="bg"></label><button class="ghost" style="width:100%;margin-top:12px" data-act="close">'+t('close')+'</button></div></div>'}
+
+function render(){
+ const A=$('#app');
+ if(!db){A.innerHTML='<div class="card login"><div style="text-align:end">'+langBtn()+'</div><h2>'+t('signin')+'</h2></div>';return}
+ if(!me){A.innerHTML=login();return}
+ const n=pend().length+(me==='karim'?st.leaves.filter(l=>l.status==='pending').length:0);
+ A.innerHTML='<div class="top"><span class="logo">📖 Study Club</span><span>'+langBtn()+' <button class="sm ghost" data-act="theme">🎨</button> <button class="sm ghost" data-act="logout">'+t('logout')+'</button></span></div><div class="tabs"><button data-act="tab" data-t="home" class="'+(tab==='home'?'on':'')+'">'+t('home')+'</button><button data-act="tab" data-t="review" class="'+(tab==='review'?'on':'')+'">'+t('review')+(n?' ('+n+')':'')+'</button>'+(me==='karim'?'<button data-act="tab" data-t="admin" class="'+(tab==='admin'?'on':'')+'">'+t('admin')+'</button>':'')+'</div>'+(tab==='review'?review():tab==='admin'&&me==='karim'?admin():home())+modalHTML();
+}
+const sch=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{applyTheme();settle();render()})};
+
+async function settle(){
+ if(!me||!db||settling)return;const now=NOW(),p=st.plans.find(x=>x.who===me&&x.status==='active'&&x.due<now);if(!p)return;
+ const sub=st.study.filter(s=>s.planId===p.id);if(sub.some(s=>s.status==='pending'))return;settling=1;
+ try{if(sub.some(s=>s.status==='ok'))await D('plans/'+p.id).update({status:'done'});
+ else{const u=U(me);let patch={},status='failed';
+  if(u.leaveUntil>=p.due)status='excused';
+  else if(u.freezes>0){patch.freezes=u.freezes-1;status='frozen'}
+  else patch={score:Math.max(0,u.score-st.cfg.penalty),streak:0,failUntil:now+1728e5,failMsg:p.type};
+  await D('plans/'+p.id).update({status});if(Object.keys(patch).length)await D('users/'+me).update(patch)}
+ }catch(e){}settling=0}
+
+async function enter(k){
+ if(!st.users[k])await D('users/'+k).set(DEF);
+ me=k;ls('me',k);tab='home';err='';loginK=null;
+ if(k==='karim')D('logins/'+NOW()).set({ts:NOW()});
+ render()}
+
+document.addEventListener('click',async e=>{
+ const x=e.target.closest('[data-act]');if(!x)return;const a=x.dataset.act,id=x.dataset.id,k=x.dataset.k,v=x.dataset.v;
+ if(a==='lang'){lang=lang==='ar'?'en':'ar';ls('lang',lang);applyTheme();render();return}
+ if(!db)return;
+ const num=i=>Math.max(0,parseInt($('#'+i).value)||0);
+ try{switch(a){
+ case'pick':if(k==='malak')await enter('malak');else{loginK=1;render()}break;
+ case'back':loginK=null;err='';render();break;
+ case'pw':if($('#pw').value===PW)await enter('karim');else{err='wrongpw';render()}break;
+ case'logout':me=null;ls('me',null);render();break;
+ case'tab':tab=x.dataset.t;render();break;
+ case'type':dr.type=v;render();break;
+ case'zoom':modal={z:x.src};render();break;
+ case'close':if(e.target===x||x.tagName==='BUTTON'){modal=null;render()}break;
+ case'theme':modal={t:1};render();break;
+ case'setTheme':ls('theme',v);applyTheme();render();break;
+ case'leave':modal={l:1};render();break;
+ case'chg':modal={c:1};render();break;
+ case'doChg':{const p=myPlan();if(p)await D('plans/'+p.id).update({status:'changed'});modal=null;toast('changed');break}
+ case'rm':dr.imgs.splice(+x.dataset.i,1);render();break;
+ case'sendLeave':{const d=Math.min(30,num('ld'));if(!d)return;await D('leaves/'+NOW()).set({who:me,days:d,status:'pending',ts:NOW()});modal=null;toast('rs');break}
+ case'startPlan':{const n=new Date(),due=dr.type==='daily'?new Date(n.getFullYear(),n.getMonth(),n.getDate()+1).getTime():NOW()+6048e5;await D('plans/'+NOW()).set({who:me,type:dr.type,img:dr.plan,created:NOW(),due,status:'active'});dr.plan=null;toast('ps');break}
+ case'send':{const p=myPlan();if(!p||!dr.imgs.length||busy)return;busy=1;render();const sid=String(NOW()),imgs=dr.imgs.slice();
+  for(let i=0;i<imgs.length;i++)await D('shots/'+sid+'_'+i).set({sid,i,img:imgs[i]});
+  await D('study/'+sid).set({who:me,planId:p.id,n:imgs.length,note:dr.note,status:'pending',ts:NOW()});
+  dr.imgs=[];dr.note='';busy=0;toast('sent');render();break}
+ case'ok':case'bad':{const s=st.study.find(q=>q.id===id);if(!s||s.status!=='pending')return;
+  await D('study/'+id).update({status:a==='ok'?'ok':'bad',by:me});
+  if(a==='ok'){const u=U(s.who),today=new Date().toDateString(),p={score:u.score+st.cfg.reward};
+   if(u.lastStudy!==today){p.lastStudy=today;p.streak=u.streak+1;if(p.streak%7===0){p.freezes=u.freezes+1;toast('s7')}}
+   await D('users/'+s.who).update(p)}
+  break}
+ case'final':await D('plans/'+id).update({status:'done',final:true});toast('fin');break;
+ case'lok':case'lno':{const l=st.leaves.find(q=>q.id===id);await D('leaves/'+id).update({status:a==='lok'?'ok':'no'});
+  if(a==='lok')await D('users/'+l.who).update({leaveUntil:Math.max(NOW(),U(l.who).leaveUntil)+l.days*864e5});break}
+ case'saveU':await D('users/'+k).update({score:num('s_'+k),streak:num('t_'+k),freezes:num('f_'+k)});toast('saved');break;
+ case'grant':{const d=num('l_'+k);if(d)await D('users/'+k).update({leaveUntil:Math.max(NOW(),U(k).leaveUntil)+d*864e5});toast('gr');break}
+ case'clearFail':await D('users/'+k).update({failUntil:0});break;
+ case'saveCfg':await D('cfg/main').set({reward:num('c_r'),penalty:num('c_p')});toast('saved');break;
+ case'cancelPlan':await D('plans/'+id).update({status:'cancelled'});break;
+ case'delBg':await D('bgs/'+id).delete();break;
+ }}catch(x){busy=0;toast('er');render()}
+});
+document.addEventListener('change',async e=>{
+ const el=e.target,f=el.dataset.file;if(!f||!el.files.length)return;
+ try{if(f==='plan')dr.plan=await shrink(el.files[0],800,.55);
+ else if(f==='imgs'){for(const q of [...el.files])dr.imgs.push(await shrink(q,600,.5))}
+ else if(f==='bg'){await D('bgs/'+NOW()).set({img:await shrink(el.files[0],1000,.55),by:me});toast('bga');return}
+ render()}catch(x){toast('imf')}
+});
+document.addEventListener('input',e=>{if(e.target.dataset.in==='note')dr.note=e.target.value});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&$('#pw'))document.querySelector('[data-act=pw]').click()});
+
+setInterval(()=>{document.querySelectorAll('.cd').forEach(el=>{el.textContent=fmt(+el.dataset.due-NOW())});if(me&&db)settle()},1000);
+
+function createStandaloneDB() {
+  const KEY = 'study_club_db_v2';
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+  const cListeners = {}, dListeners = {};
+  const baseUrl = FIREBASE_URL ? FIREBASE_URL.replace(/\/$/, '') : '';
+
+  const saveLocal = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e) {} };
+  const notify = (col, id) => {
+    if (cListeners[col]) {
+      const colObj = store[col] || {};
+      const docs = Object.keys(colObj).map(k => ({ id: k, data: () => colObj[k] }));
+      cListeners[col].forEach(fn => fn({ docs }));
+    }
+    const path = col + '/' + id;
+    if (dListeners[path]) {
+      const val = store[col] && store[col][id];
+      dListeners[path].forEach(fn => fn({ exists: !!val, data: () => val }));
+    }
+  };
+  const notifyAll = () => {
+    Object.keys(cListeners).forEach(col => notify(col, ''));
+    Object.keys(dListeners).forEach(path => { const [c, i] = path.split('/'); notify(c, i); });
+  };
+
+  if (baseUrl) {
+    const syncRemote = async () => {
+      try {
+        const res = await fetch(baseUrl + '/studyclub.json');
+        if (res.ok) {
+          const data = await res.json();
+          if (JSON.stringify(data || {}) !== JSON.stringify(store)) {
+            store = data || {};
+            saveLocal();
+            notifyAll();
+          }
+        }
+      } catch(e) {}
+    };
+    syncRemote();
+    setInterval(syncRemote, 3000);
+  }
+
+  return {
+    collection(col) {
+      return {
+        onSnapshot(fn) {
+          (cListeners[col] = cListeners[col] || []).push(fn);
+          const colObj = store[col] || {};
+          const docs = Object.keys(colObj).map(k => ({ id: k, data: () => colObj[k] }));
+          fn({ docs });
+        }
+      };
+    },
+    doc(path) {
+      const [col, id] = path.split('/');
+      return {
+        async set(data) {
+          store[col] = store[col] || {};
+          store[col][id] = data;
+          saveLocal(); notify(col, id);
+          if (baseUrl) { try { await fetch(`${baseUrl}/studyclub/${col}/${id}.json`, { method: 'PUT', body: JSON.stringify(data) }); } catch(e) {} }
+        },
+        async update(patch) {
+          store[col] = store[col] || {};
+          store[col][id] = Object.assign({}, store[col][id] || {}, patch);
+          saveLocal(); notify(col, id);
+          if (baseUrl) { try { await fetch(`${baseUrl}/studyclub/${col}/${id}.json`, { method: 'PATCH', body: JSON.stringify(patch) }); } catch(e) {} }
+        },
+        async delete() {
+          if (store[col]) delete store[col][id];
+          saveLocal(); notify(col, id);
+          if (baseUrl) { try { await fetch(`${baseUrl}/studyclub/${col}/${id}.json`, { method: 'DELETE' }); } catch(e) {} }
+        },
+        onSnapshot(fn) {
+          (dListeners[path] = dListeners[path] || []).push(fn);
+          const val = store[col] && store[col][id];
+          fn({ exists: !!val, data: () => val });
+        }
+      };
+    }
+  };
+}
+
+(async()=>{
+ applyTheme();render();
+ db = createStandaloneDB();
+ const sub=(c,f)=>db.collection(c).onSnapshot(s=>{f(s.docs);sch()}),L=d=>d.map(q=>Object.assign({id:q.id},q.data()));
+ sub('users',d=>{st.users={};d.forEach(q=>st.users[q.id]=q.data())});
+ sub('plans',d=>st.plans=L(d));sub('study',d=>st.study=L(d));sub('shots',d=>st.shots=L(d));sub('leaves',d=>st.leaves=L(d));sub('bgs',d=>st.bgs=L(d));sub('logins',d=>st.logins=L(d));
+ db.doc('cfg/main').onSnapshot(s=>{if(s.exists)st.cfg=Object.assign({reward:1,penalty:1},s.data());sch()});
+ sch();
+})();
+})();
+</script>
+</body>
+</html>
